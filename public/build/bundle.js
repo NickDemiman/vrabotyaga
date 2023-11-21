@@ -10,7 +10,7 @@
 var Handlebars = __webpack_require__(/*! ../node_modules/handlebars/runtime.js */ "./node_modules/handlebars/runtime.js");
 function __default(obj) { return obj && (obj.__esModule ? obj["default"] : obj); }
 module.exports = (Handlebars["default"] || Handlebars).template({"compiler":[8,">= 4.3.0"],"main":function(container,depth0,helpers,partials,data) {
-    return "<button>Press me</button>";
+    return "<button>Press Me</button>";
 },"useData":true});
 
 /***/ }),
@@ -1611,47 +1611,46 @@ module.exports = __webpack_require__(/*! ./dist/cjs/handlebars.runtime */ "./nod
 /*!***********************!*\
   !*** ./src/button.ts ***!
   \***********************/
-/***/ (function(__unused_webpack_module, exports, __webpack_require__) {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Button: () => (/* binding */ Button)
+/* harmony export */ });
+/* harmony import */ var _snail_component__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./snail/component */ "./src/snail/component.ts");
+/* harmony import */ var _button_hbs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./button.hbs */ "./src/button.hbs");
+/* harmony import */ var _button_hbs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_button_hbs__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _utility_stringToElem__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./utility/stringToElem */ "./src/utility/stringToElem.ts");
 
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Button = void 0;
-const component_1 = __webpack_require__(/*! ./component */ "./src/component.ts");
-const button_hbs_1 = __importDefault(__webpack_require__(/*! ./button.hbs */ "./src/button.hbs"));
-// import Handlebars from "handlebars/runtime";
-class Button extends component_1.Component {
-    constructor(attrs) {
-        // const template = () => `<button>Press Me</button>`;
-        // const template = Handlebars.compile('./button.hbs');
-        super(button_hbs_1.default, attrs);
+
+
+class Button extends _snail_component__WEBPACK_IMPORTED_MODULE_0__.Component {
+    constructor(props) {
+        super((_button_hbs__WEBPACK_IMPORTED_MODULE_1___default()), props);
     }
     render() {
-        return this.tmpl();
+        return (0,_utility_stringToElem__WEBPACK_IMPORTED_MODULE_2__.stringToElement)(this.tmpl());
     }
 }
-exports.Button = Button;
 
 
 /***/ }),
 
-/***/ "./src/component.ts":
-/*!**************************!*\
-  !*** ./src/component.ts ***!
-  \**************************/
-/***/ ((__unused_webpack_module, exports) => {
+/***/ "./src/snail/component.ts":
+/*!********************************!*\
+  !*** ./src/snail/component.ts ***!
+  \********************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.Component = void 0;
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Component: () => (/* binding */ Component),
+/* harmony export */   useState: () => (/* binding */ useState)
+/* harmony export */ });
 class Component {
-    constructor(tmpl, attrs) {
-        this.domElement = null;
-        this.attrs = null;
+    constructor(tmpl, props) {
         // protected triggerEvent<D>(eventName: string, detail?: D) {
         //     this.domElement.dispatchEvent(
         //         new CustomEvent(eventName, {
@@ -1663,19 +1662,26 @@ class Component {
         // }
         this.isRendered = false;
         this.tmpl = tmpl;
-        if (attrs) {
-            this.attrs = attrs;
-        }
+        this.props = props;
     }
     update() {
         if (!this.domElement) {
             throw new Error('domElement is null');
         }
-        this.renderTo(this.domElement.parentNode);
+        this.replace(this.domElement);
     }
-    renderTo(element) {
-        element.innerHTML = this.render();
-        this.domElement = element.childNodes[0];
+    appendTo(element) {
+        element.appendChild(this.render());
+        this.domElement = Array.from(element.childNodes).at(-1);
+        this.postRender();
+    }
+    replace(element) {
+        element.after(this.render());
+        this.domElement = element.nextSibling;
+        element.remove();
+        this.postRender();
+    }
+    postRender() {
         if (!this.isRendered) {
             this.isRendered = true;
             this.onMount();
@@ -1687,18 +1693,38 @@ class Component {
     onUpdate() { }
     onDestroy() { }
 }
-exports.Component = Component;
-// export const useState = (value: any) => {
-//     if (!(this as any instanceof Component)) {
-//         throw new Error('useState must be used inside Component <3');
-//     }
-//     const ref = this;
-//     const callback = (newValue: any) => {
-//         value = newValue;
-//         ref.update();
-//     }
-//     return [value, callback];
+const useState = (value, component) => {
+    function callback(newValue) {
+        value = newValue;
+        component.update();
+    }
+    return [value, callback];
+};
+// export const snail = {
+//     Component,
+//     useState
 // }
+
+
+/***/ }),
+
+/***/ "./src/utility/stringToElem.ts":
+/*!*************************************!*\
+  !*** ./src/utility/stringToElem.ts ***!
+  \*************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   stringToElement: () => (/* binding */ stringToElement)
+/* harmony export */ });
+function stringToElement(tmpl) {
+    const template = document.createElement('template');
+    tmpl = tmpl.trim();
+    template.innerHTML = tmpl;
+    return template.content.firstChild;
+}
 
 
 /***/ })
@@ -1723,27 +1749,68 @@ exports.Component = Component;
 /******/ 		};
 /******/ 	
 /******/ 		// Execute the module function
-/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
 /******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
 /************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	(() => {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = (module) => {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	(() => {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	(() => {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = (exports) => {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	})();
+/******/ 	
+/************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
 (() => {
 "use strict";
-var exports = __webpack_exports__;
 /*!**********************!*\
   !*** ./src/index.ts ***!
   \**********************/
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var _button__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./button */ "./src/button.ts");
 
-Object.defineProperty(exports, "__esModule", ({ value: true }));
 const root = document.body;
-const button_1 = __webpack_require__(/*! ./button */ "./src/button.ts");
-const btn = new button_1.Button();
-btn.renderTo(root);
+const btn = new _button__WEBPACK_IMPORTED_MODULE_0__.Button();
+btn.appendTo(root);
+// btn.renderTo(root);
 
 })();
 

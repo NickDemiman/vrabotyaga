@@ -1,6 +1,6 @@
-const root : HTMLElement = document.body;
 import { Button } from "./button";
 
+const root : HTMLElement = document.body;
 const btn = new Button();
-
-btn.renderTo(root);
+btn.appendTo(root);
+// btn.renderTo(root);
