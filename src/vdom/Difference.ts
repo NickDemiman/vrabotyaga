@@ -249,6 +249,8 @@ export const applyChanges = (element: HTMLElement | Text, difference: VDomNodeUp
         throw new Error('попытка внести данные в Text');
     }
 
+    applyChildrenChanges(element, difference.children);
+
     return element;
 };
 
