@@ -5,9 +5,9 @@
   "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev-win": "start npm run build && start npm run serve",
+    "dev-win": "start npm run build && start npm run server",
     "build": "webpack",
-    "serve": "node server/index.js"
+    "server": "node server/index.js"
   },
   "author": "",
   "license": "ISC",

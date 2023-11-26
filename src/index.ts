@@ -1,6 +1,5 @@
-import { Button } from "./button";
+import { App } from "./App";
 
-const root : HTMLElement = document.body;
-const btn = new Button();
-btn.appendTo(root);
-// btn.renderTo(root);
+import { renderToElementDyId, createComponent } from "./vdom/VirtualDOM";
+
+renderToElementDyId('root', createComponent(App, { key: 'app' }));

@@ -1,77 +1,84 @@
-export abstract class Component {
+import { VDomNodeUpdater, applyChanges, getDifference } from "../vdom/Difference";
+import { VDomNode } from "../vdom/VirtualDOM";
 
-    protected tmpl: Function;
-    protected domElement?: HTMLElement | undefined;
-    protected props?: Props | undefined;
+export abstract class Component<PropsType, StateType> {
 
-    constructor(tmpl: Function, props?: Props) {
-        this.tmpl = tmpl;
-        this.props = props;
-    }
+    protected props: PropsType | undefined;
+    protected state: StateType | undefined;
 
-    update() {
+    private node: VDomNode | undefined;
+    private domElement: HTMLElement | Text | undefined;
+
+    protected setState(updater: (state: StateType | undefined) => StateType) {
         if (!this.domElement) {
-            throw new Error('domElement is null');
+            throw new Error('domelement is undefined');
+        };
+
+        this.state = updater(this.state);
+        applyChanges(this.domElement, this.getComponentDifference());
+    };
+
+    public setProps(props: PropsType): VDomNodeUpdater {
+        if (!this.domElement) {
+            throw new Error('domelement is undefined');
         }
 
-        this.replace(this.domElement);
-    }
+        this.state = this.componentWillRecieveProps(props, this.state);
+        this.props = props;
+        return this.getComponentDifference();
+    };
 
-    appendTo(element: HTMLElement): void {
-        element.appendChild(this.render());
-        this.domElement = Array.from(element.childNodes).at(-1) as HTMLElement;
+    public initProps(props: PropsType | undefined): VDomNode {
+        this.props = props;
+        this.node = this.render();
+        return this.node;
+    };
 
-        this.postRender();
-    }
+    public notifyMounted(element: HTMLElement | Text) {
+        this.domElement = element;
+        // необходимо для асинхронного выполнения
+        setTimeout(() => {
+            this.componentDidMount();
+        });
+    };
 
-    replace(element: HTMLElement): void {
-        element.after(this.render());
-        this.domElement = element.nextSibling as HTMLElement;
-        element.remove();
+    public unmount() {
+        this.componentWillUnmount();
+        this.domElement = undefined;
+    };
 
-        this.postRender();
-    }
+    public componentDidMount() {};
+    public componentWillRecieveProps(
+        props: PropsType, 
+        state: StateType | undefined
+    ): StateType | undefined 
+    { 
+        return state; 
+    };
+    public componentDidUpdate() {};
+    public componentWillUnmount() {};
 
-    postRender(): void {
-        if (!this.isRendered) {
-            this.isRendered = true;
-            this.onMount();
+    private getComponentDifference(): VDomNodeUpdater {
+        if (!this.node) {
+            this.node = this.initProps(this.props);
         }
 
-        this.didMount();
-    }
+        const newNode = this.render();
+        const difference = getDifference(this.node, newNode);
+        if (difference.kind == 'replace') {
+            // передаём стрелочную функцию, для сохранения контекста
+            difference.callback = (element) => {
+                this.domElement = element;
+            };
+        }
+        this.node = newNode;
+        // необходимо для асинхронного выполнения
+        setTimeout(() => {
+            this.componentDidUpdate();
+        });
 
-    public onMount() { }
-    public didMount() { }
-    public onUpdate() { }
-    public onDestroy() { }
+        return difference;
+    };
 
-    public abstract render(): HTMLElement;
-
-    // protected triggerEvent<D>(eventName: string, detail?: D) {
-    //     this.domElement.dispatchEvent(
-    //         new CustomEvent(eventName, {
-    //             bubbles: true,
-    //             detail,
-    //         })
-    //     );
-
-    //     return false;
-    // }
-
-    private isRendered = false;
-}
-
-export const useState = (value: any, component: Component) => {
-    function callback (newValue: any) {
-        value = newValue;
-        component.update();
-    }
-
-    return [value, callback];
-}
-
-// export const snail = {
-//     Component,
-//     useState
-// }
+    public abstract render(): VDomNode;
+};
