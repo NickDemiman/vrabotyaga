@@ -13,16 +13,11 @@ export interface RouterProps {
     routes: Array<RouteProps>
 };
 
-interface RouterState { };
-
-export class Router extends Component<RouterProps, RouterState> {
+export class Router extends Component<RouterProps, {}> {
 
     public componentDidMount(): void {
         Navigate.addCallback(() => {
-            //функция setState вызывает изменения в VDOM
-            this.setState((state) => { 
-                return state || {}; 
-            });
+            this.applyComponentChanges();
         });
     }
 

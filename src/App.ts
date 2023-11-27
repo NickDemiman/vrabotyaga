@@ -2,8 +2,9 @@ import { Component } from "./snail/component";
 import { createComponent, createElement, createText, createRouter } from "./vdom/VirtualDOM";
 import { Router } from "./router/Router";
 import Navigate from "./router/Navigate";
+import Dispatcher from "./store/Dispatcher";
 
-interface AppProps { };
+import CounterStore from "./CounterStore";
 
 interface AppState {
     name: string,
@@ -11,7 +12,7 @@ interface AppState {
     count: number,
 };
 
-export class App extends Component<AppProps, AppState> {
+export class App extends Component<{}, AppState> {
 
     state = { 
         name: 'App',
@@ -19,6 +20,7 @@ export class App extends Component<AppProps, AppState> {
         count: 0 
     };
 
+    // функция для демонастрации работы setState
     incCount() {
         this.setState((state) => {
             if (!state) {
@@ -27,7 +29,12 @@ export class App extends Component<AppProps, AppState> {
             state.count = this.state.count + 1;
             return state;
         });
-    }
+    };
+
+    // связка стора и компонента
+    public componentDidMount() {
+        CounterStore.addStoreUpdater(() => { this.applyComponentChanges(); });
+    };
 
     render() {
         return createElement(
@@ -41,6 +48,7 @@ export class App extends Component<AppProps, AppState> {
                 { key: 'app-title' },
                 createText(this.state.title)
             ),
+            // демонстрация работы setState
             createElement(
                 'button',                
                 {
@@ -50,6 +58,17 @@ export class App extends Component<AppProps, AppState> {
                 createText('Button count: '),
                 createText(this.state.count),
             ),
+            // демонатсрация работы store
+            createElement(
+                'button',                
+                {
+                    key: 'app-button',
+                    onclick: () => { Dispatcher.dispatch({ name: 'INC_COUNT' }) },
+                },
+                createText('Count from store: '),
+                createText(CounterStore.getCount()),
+            ),
+            // демонстрация работы роутинга
             createElement(
                 'button',                
                 {

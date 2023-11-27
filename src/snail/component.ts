@@ -15,6 +15,14 @@ export abstract class Component<PropsType, StateType> {
         };
 
         this.state = updater(this.state);
+        this.applyComponentChanges();
+    };
+
+    protected applyComponentChanges() {
+        if (!this.domElement) {
+            throw new Error('domelement is undefined');
+        };
+
         applyChanges(this.domElement, this.getComponentDifference());
     };
 
@@ -78,30 +86,6 @@ export abstract class Component<PropsType, StateType> {
         });
 
         return difference;
-    };
-
-    protected getChildrenByKey(key: string | number): Array<VDomNode> {
-        if (!this.node) {
-            throw new Error('node is undefined');
-        }
-
-        if (this.node.kind == 'text') {
-            return [];
-        }
-
-        if (this.node.kind == 'element') {
-            if (!this.node.children) {
-                return [];
-            }
-            return this.node.children.filter((element) => element.key == key);
-        }
-
-        if (!this.node.instance) {
-            throw new Error('this component is not mounted for search children');
-        }
-        
-        return this.node.instance.getChildrenByKey(key);
-
     };
 
     public abstract render(): VDomNode;
