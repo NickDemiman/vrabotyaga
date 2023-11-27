@@ -10,7 +10,6 @@ export interface RouteProps {
 };
 
 export interface RouterProps {
-    baseUrl: string,
     routes: Array<RouteProps>
 };
 
@@ -20,6 +19,7 @@ export class Router extends Component<RouterProps, RouterState> {
 
     public componentDidMount(): void {
         Navigate.addCallback(() => {
+            //функция setState вызывает изменения в VDOM
             this.setState((state) => { 
                 return state || {}; 
             });

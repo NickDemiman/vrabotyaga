@@ -70,7 +70,6 @@ export class App extends Component<AppProps, AppState> {
                 Router,
                 {
                     key: 'Router',
-                    baseUrl: '^/$',
                     routes: createRouter([
                         {
                             path: '^/$',

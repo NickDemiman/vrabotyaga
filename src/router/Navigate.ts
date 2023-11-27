@@ -1,6 +1,14 @@
 export class Navigate {
     callbacks: Array<Function> = [];
 
+    constructor() {
+        window.addEventListener('popstate', () => {
+            this.callbacks.forEach((callback) => {
+                callback();
+            });  
+        });
+    }
+
     addCallback(newCallback: Function) {
         this.callbacks.push(newCallback);
     }
