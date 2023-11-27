@@ -1,5 +1,7 @@
 import { Component } from "./snail/component";
-import { createElement, createText } from "./vdom/VirtualDOM";
+import { createComponent, createElement, createText, createRouter } from "./vdom/VirtualDOM";
+import { Router } from "./router/Router";
+import Navigate from "./router/Navigate";
 
 interface AppProps { };
 
@@ -47,6 +49,47 @@ export class App extends Component<AppProps, AppState> {
                 },
                 createText('Button count: '),
                 createText(this.state.count),
+            ),
+            createElement(
+                'button',                
+                {
+                    key: 'app-button',
+                    onclick: () => { Navigate.navigateTo('/signin'); },
+                },
+                createText('Вход'),
+            ),
+            createElement(
+                'button',                
+                {
+                    key: 'app-button',
+                    onclick: () => { Navigate.navigateTo('/'); },
+                },
+                createText('Главная страница'),
+            ),
+            createComponent(
+                Router,
+                {
+                    key: 'Router',
+                    baseUrl: '^/$',
+                    routes: createRouter([
+                        {
+                            path: '^/$',
+                            routeElement: createElement(
+                                'div',
+                                { key: 'main-page' },
+                                createText('Главная страница')
+                            ),
+                        },
+                        {
+                            path: '^/signin$',
+                            routeElement: createElement(
+                                'div',
+                                { key: 'signin-page' },
+                                createText('Страница входа'),
+                            ),
+                        }
+                    ])
+                },
             )
         );
     };

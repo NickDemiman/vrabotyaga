@@ -1,4 +1,5 @@
 import { Component } from "../snail/component";
+import { RouteProps } from "../router/Router";
 
 export type VDomPropType = string | number | boolean | Function; 
 
@@ -70,6 +71,20 @@ export const createComponent = <PropsType extends object>(
         key: key
     });
 };
+
+export const createRouter = (routes: Array<{ path: string, routeElement: VDomNode }>): Array<RouteProps> => {
+    let result: Array<RouteProps> = [];
+
+    routes.forEach((route) => {
+        result.push({
+            path: new RegExp(route.path),
+            node: route.routeElement,
+            routes: null
+        });
+    });
+
+    return result;
+}
 
 export const renderVDomNode = (rootNode: VDomNode): HTMLElement | Text => {
     if (rootNode.kind == 'text') {
