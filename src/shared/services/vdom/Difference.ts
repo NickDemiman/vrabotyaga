@@ -90,7 +90,7 @@ const getSetProps = (node: VDomElement, newNode: VDomElement) => {
 
 const getRemoveProps = (node: VDomElement, newNode: VDomElement): Array<string> => {
     return Object.keys(node.props || {}).filter((prop) => {
-        const index = Object.keys(newNode).indexOf(prop);
+        const index = Object.keys(newNode.props || {}).indexOf(prop);
         return index == -1;
     });
 }
@@ -245,7 +245,13 @@ export const applyChanges = (element: HTMLElement | Text, difference: VDomNodeUp
         });    
 
         Object.keys(difference.props.set).forEach((prop) => {
-            (element as any)[prop] = difference.props.set[prop];
+            if (prop == 'class') {
+                if (difference.props.set[prop] !== '') {
+                    element.classList.add(difference.props.set[prop].toString());
+                }
+            } else {
+                (element as any)[prop] = difference.props.set[prop];
+            }
         });
     } else {
         throw new Error('попытка внести данные в Text');

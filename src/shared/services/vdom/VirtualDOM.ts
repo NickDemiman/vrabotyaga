@@ -70,20 +70,6 @@ export const createComponent = <PropsType extends object>(
     });
 };
 
-/*export const createRouter = (routes: Array<{ path: string, routeElement: VDomNode }>): Array<RouteProps> => {
-    let result: Array<RouteProps> = [];
-
-    routes.forEach((route) => {
-        result.push({
-            path: new RegExp(route.path),
-            node: route.routeElement,
-            routes: null
-        });
-    });
-
-    return result;
-}*/
-
 export const renderVDomNode = (rootNode: VDomNode): HTMLElement | Text => {
     if (rootNode.kind == 'text') {
         return document.createTextNode(rootNode.value);
@@ -94,7 +80,15 @@ export const renderVDomNode = (rootNode: VDomNode): HTMLElement | Text => {
 
         Object.keys(rootNode.props || {}).forEach((prop) => {
             if (rootNode.props) {
-                (element as any)[prop] = rootNode.props[prop];
+                if (prop == 'class') {
+                    rootNode.props[prop].toString().split(' ').forEach((elementClass) => {
+                        if (elementClass !== '') {
+                            element.classList.add(elementClass);
+                        }
+                    });
+                } else {
+                    (element as any)[prop] = rootNode.props[prop];
+                }
             }
         });
 

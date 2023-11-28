@@ -32,10 +32,14 @@ module.exports = {
         loader: 'handlebars-loader',
         exclude: /node_modules/,
       },
+      {
+        test: /\.(sa|sc|c)ss$/,
+        use: ["style-loader", "css-loader", "sass-loader"]
+      }
     ]
   },
   resolve: {
-    extensions: ['.json', '.ts', '.hbs', '.js'],
+    extensions: ['.json', '.ts', '.hbs', '.js', ''],
     modules: [ '/node_modules' ]
   },
   devtool: 'source-map',

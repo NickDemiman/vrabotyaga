@@ -1,10 +1,13 @@
-import { Component } from "./snail/component";
-import { createComponent, createElement, createText } from "./vdom/VirtualDOM";
-import { Router, Route } from "./router/Routing";
-import Navigate from "./router/Navigate";
-import Dispatcher from "./store/Dispatcher";
+import { Component } from "./shared/services/snail/component";
+import { createComponent, createElement, createText } from "./shared/services/vdom/VirtualDOM";
+
+import { Router, Route } from "./shared/services/router/Routing";
+import Navigate from "./shared/services/router/Navigate";
+
+import Dispatcher from "./shared/services/store/Dispatcher";
 
 import CounterStore from "./CounterStore";
+import { Button } from "./components/Button/Button";
 
 interface AppState {
     name: string,
@@ -44,12 +47,14 @@ export class App extends Component<{}, AppState> {
                 createText(this.state.title)
             ),
             // демонстрация работы setState
-            createElement(
-                'button',                
-                {
+            createComponent(
+                Button,
+                { 
+                    id: 'button', 
+                    variant: 'primary', 
                     onclick: () => { this.incCount(); },
                 },
-                createText('Button count: '),
+                createText('Нажми на эту кнопку со стилем primary: '),
                 createText(this.state.count),
             ),
             // демонатсрация работы store
