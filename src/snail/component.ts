@@ -79,12 +79,8 @@ export abstract class Component<PropsType, StateType> {
             this.node = this.initProps(this.props);
         }
 
-        console.log('GET DIFFERENDE');
-
         const newNode = this.render();
-        console.log(this.node, newNode);
         const difference = getDifference(this.node, newNode);
-        console.log(difference);
         if (difference.kind == 'replace') {
             // передаём стрелочную функцию для сохранения контекста
             // здесь не вызывается notifyMounted, так как он учатсвует в жизненном цикле компонента
