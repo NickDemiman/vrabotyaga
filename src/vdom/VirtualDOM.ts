@@ -1,6 +1,9 @@
 import { Component } from "../snail/component";
 import { RouteProps } from "../router/Router";
 
+// формирует ключи для элементов вместо пользователя
+import KeyManager from "./KeyManager";
+
 export type VDomPropType = string | number | boolean | Function; 
 
 export type VDomPropsType = {
@@ -44,15 +47,15 @@ export const createText = (
 
 export const createElement = (
     tag: string,
-    props: VDomPropsType & { key: string },
+    props: VDomPropsType,
     ...children: Array<VDomNode>
 ): VDomElement => {
-    const { key, ...allProps } = props;
+    const key: string = KeyManager.addKey(tag);
 
     return ({
         kind: 'element',
         tag: tag,
-        props: allProps,
+        props: props,
         children: [...children],
         key: key
     });
@@ -60,13 +63,13 @@ export const createElement = (
 
 export const createComponent = <PropsType extends object>(
     component: { new(): Component<PropsType, any> },
-    props: PropsType & { key: string }
+    props: PropsType
 ): VDomComponent => {
-    const { key, ...allProps } = props;
+    const key: string = KeyManager.addKey(component.name);
 
     return ({
         kind: 'component',
-        props: allProps,
+        props: props,
         component: component,
         key: key
     });

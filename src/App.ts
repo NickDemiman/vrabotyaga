@@ -45,14 +45,13 @@ export class App extends Component<{}, AppState> {
             }, 
             createElement(
                 'div',
-                { key: 'app-title' },
+                { },
                 createText(this.state.title)
             ),
             // демонстрация работы setState
             createElement(
                 'button',                
                 {
-                    key: 'app-button',
                     onclick: () => { this.incCount(); },
                 },
                 createText('Button count: '),
@@ -62,7 +61,6 @@ export class App extends Component<{}, AppState> {
             createElement(
                 'button',                
                 {
-                    key: 'app-button',
                     onclick: () => { Dispatcher.dispatch({ name: 'INC_COUNT' }) },
                 },
                 createText('Count from store: '),
@@ -72,7 +70,6 @@ export class App extends Component<{}, AppState> {
             createElement(
                 'button',                
                 {
-                    key: 'app-button',
                     onclick: () => { Navigate.navigateTo('/signin'); },
                 },
                 createText('Вход'),
@@ -80,7 +77,6 @@ export class App extends Component<{}, AppState> {
             createElement(
                 'button',                
                 {
-                    key: 'app-button',
                     onclick: () => { Navigate.navigateTo('/'); },
                 },
                 createText('Главная страница'),
@@ -88,7 +84,6 @@ export class App extends Component<{}, AppState> {
             createComponent(
                 Router,
                 {
-                    key: 'Router',
                     routes: createRouter([
                         {
                             path: '^/$',
