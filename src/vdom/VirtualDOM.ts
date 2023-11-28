@@ -1,8 +1,4 @@
 import { Component } from "../snail/component";
-import { RouteProps } from "../router/Router";
-
-// формирует ключи для элементов вместо пользователя
-import KeyManager from "./KeyManager";
 
 export type VDomPropType = string | number | boolean | Function; 
 
@@ -28,6 +24,7 @@ export interface VDomComponent {
     kind: 'component',
     instance?: Component<any, any>,
     props: object,
+    children: Array<VDomNode>,
     component: { new(): Component<any, any> },
     key: string | number
 };
@@ -50,32 +47,30 @@ export const createElement = (
     props: VDomPropsType,
     ...children: Array<VDomNode>
 ): VDomElement => {
-    const key: string = KeyManager.addKey(tag);
-
     return ({
         kind: 'element',
         tag: tag,
         props: props,
         children: [...children],
-        key: key
+        key: tag
     });
 };
 
 export const createComponent = <PropsType extends object>(
     component: { new(): Component<PropsType, any> },
-    props: PropsType
+    props: PropsType,
+    ...children: Array<VDomNode>
 ): VDomComponent => {
-    const key: string = KeyManager.addKey(component.name);
-
     return ({
         kind: 'component',
         props: props,
+        children: children,
         component: component,
-        key: key
+        key: component.name
     });
 };
 
-export const createRouter = (routes: Array<{ path: string, routeElement: VDomNode }>): Array<RouteProps> => {
+/*export const createRouter = (routes: Array<{ path: string, routeElement: VDomNode }>): Array<RouteProps> => {
     let result: Array<RouteProps> = [];
 
     routes.forEach((route) => {
@@ -87,7 +82,7 @@ export const createRouter = (routes: Array<{ path: string, routeElement: VDomNod
     });
 
     return result;
-}
+}*/
 
 export const renderVDomNode = (rootNode: VDomNode): HTMLElement | Text => {
     if (rootNode.kind == 'text') {
@@ -117,6 +112,7 @@ export const renderVDomNode = (rootNode: VDomNode): HTMLElement | Text => {
     }
 
     rootNode.instance = new rootNode.component();
+    rootNode.instance.setChildren(rootNode.children);
     const element = renderVDomNode(rootNode.instance.initProps(rootNode.props));
     rootNode.instance.notifyMounted(element as HTMLElement);
     return element;

@@ -5,9 +5,18 @@ export abstract class Component<PropsType, StateType> {
 
     protected props: PropsType | undefined;
     protected state: StateType | undefined;
+    protected children: Array<VDomNode> = [];
 
     private node: VDomNode | undefined;
     private domElement: HTMLElement | Text | undefined;
+
+    protected applyComponentChanges() {
+        if (!this.domElement) {
+            throw new Error('domelement is undefined');
+        };
+
+        applyChanges(this.domElement, this.getComponentDifference());
+    };
 
     protected setState(updater: (state: StateType | undefined) => StateType) {
         if (!this.domElement) {
@@ -16,14 +25,6 @@ export abstract class Component<PropsType, StateType> {
 
         this.state = updater(this.state);
         this.applyComponentChanges();
-    };
-
-    protected applyComponentChanges() {
-        if (!this.domElement) {
-            throw new Error('domelement is undefined');
-        };
-
-        applyChanges(this.domElement, this.getComponentDifference());
     };
 
     public setProps(props: PropsType): VDomNodeUpdater {
@@ -36,10 +37,15 @@ export abstract class Component<PropsType, StateType> {
         return this.getComponentDifference();
     };
 
+    public setChildren(children: Array<VDomNode>) {
+        this.children = children;
+    }
+
     public initProps(props: PropsType | undefined): VDomNode {
         this.props = props;
         this.node = this.render();
         return this.node;
+
     };
 
     public notifyMounted(element: HTMLElement | Text) {
@@ -56,6 +62,10 @@ export abstract class Component<PropsType, StateType> {
     };
 
     public componentDidMount() {};
+    public componentDidUpdate() {};
+    public componentWillUnmount() {};
+
+    // эта функция определят влияние параметров на состояние компонента
     public componentWillRecieveProps(
         props: PropsType, 
         state: StateType | undefined
@@ -63,18 +73,21 @@ export abstract class Component<PropsType, StateType> {
     { 
         return state; 
     };
-    public componentDidUpdate() {};
-    public componentWillUnmount() {};
 
     private getComponentDifference(): VDomNodeUpdater {
         if (!this.node) {
             this.node = this.initProps(this.props);
         }
 
+        console.log('GET DIFFERENDE');
+
         const newNode = this.render();
+        console.log(this.node, newNode);
         const difference = getDifference(this.node, newNode);
+        console.log(difference);
         if (difference.kind == 'replace') {
-            // передаём стрелочную функцию, для сохранения контекста
+            // передаём стрелочную функцию для сохранения контекста
+            // здесь не вызывается notifyMounted, так как он учатсвует в жизненном цикле компонента
             difference.callback = (element) => {
                 this.domElement = element;
             };

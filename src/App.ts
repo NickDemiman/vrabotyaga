@@ -1,6 +1,6 @@
 import { Component } from "./snail/component";
-import { createComponent, createElement, createText, createRouter } from "./vdom/VirtualDOM";
-import { Router } from "./router/Router";
+import { createComponent, createElement, createText } from "./vdom/VirtualDOM";
+import { Router, Route } from "./router/Router";
 import Navigate from "./router/Navigate";
 import Dispatcher from "./store/Dispatcher";
 
@@ -83,26 +83,29 @@ export class App extends Component<{}, AppState> {
             ),
             createComponent(
                 Router,
-                {
-                    routes: createRouter([
-                        {
-                            path: '^/$',
-                            routeElement: createElement(
-                                'div',
-                                { key: 'main-page' },
-                                createText('Главная страница')
-                            ),
-                        },
-                        {
-                            path: '^/signin$',
-                            routeElement: createElement(
-                                'div',
-                                { key: 'signin-page' },
-                                createText('Страница входа'),
-                            ),
-                        }
-                    ])
-                },
+                { },
+                createComponent(
+                    Route,
+                    {
+                        path: new RegExp('^/$'),
+                    },
+                    createElement(
+                        'div',
+                        { },
+                        createText('Главная страница')
+                    ),
+                ),
+                createComponent(
+                    Route,
+                    {
+                        path: new RegExp('^/signin$'),
+                    },
+                    createElement(
+                        'div',
+                        { },
+                        createText('Вход')
+                    ),
+                ),
             )
         );
     };

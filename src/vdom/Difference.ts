@@ -23,7 +23,7 @@ interface UpdateFunction {
 interface ReplaceFunction {
     kind: 'replace',
     newNode: VDomNode,
-    callback?: (element: HTMLElement | Text) => void
+    callback?: (element: HTMLElement | Text) => void // callback необходим для компонентов
 };
 
 interface PassFunction {
@@ -114,6 +114,7 @@ export const getDifference = (
         && node.instance
     ) {
         newNode.instance = node.instance;
+        newNode.instance.setChildren(newNode.children);
         return newNode.instance.setProps(newNode.props);
     };
 
@@ -125,6 +126,7 @@ export const getDifference = (
 
     if (newNode.kind == 'component') {
         newNode.instance = new newNode.component();
+        newNode.instance.setChildren(newNode.children);
         return {
             kind: 'replace',
             newNode: newNode.instance.initProps(newNode.props),
