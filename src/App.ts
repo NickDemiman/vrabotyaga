@@ -1,6 +1,6 @@
 import { Component } from "./snail/component";
 import { createComponent, createElement, createText } from "./vdom/VirtualDOM";
-import { Router, Route } from "./router/Router";
+import { Router, Route } from "./router/Routing";
 import Navigate from "./router/Navigate";
 import Dispatcher from "./store/Dispatcher";
 
@@ -38,14 +38,9 @@ export class App extends Component<{}, AppState> {
 
     render() {
         return createElement(
-            'div', 
-            { 
-                id: 'root', 
-                key: 'app-div' 
-            }, 
+            'div', { id: 'root' }, 
             createElement(
-                'div',
-                { },
+                'div', { },
                 createText(this.state.title)
             ),
             // демонстрация работы setState
@@ -82,27 +77,19 @@ export class App extends Component<{}, AppState> {
                 createText('Главная страница'),
             ),
             createComponent(
-                Router,
-                { },
+                Router, { },
                 createComponent(
                     Route,
-                    {
-                        path: new RegExp('^/$'),
-                    },
+                    { path: new RegExp('^/$') },
                     createElement(
-                        'div',
-                        { },
+                        'div', { },
                         createText('Главная страница')
                     ),
                 ),
                 createComponent(
-                    Route,
-                    {
-                        path: new RegExp('^/signin$'),
-                    },
+                    Route, { path: new RegExp('^/signin$') },
                     createElement(
-                        'div',
-                        { },
+                        'div', { },
                         createText('Вход')
                     ),
                 ),

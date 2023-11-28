@@ -1,5 +1,5 @@
 import { Component } from "../snail/component";
-import { VDomNode, createElement, createText, renderVDomNode } from "../vdom/VirtualDOM";
+import { createElement, createText } from "../vdom/VirtualDOM";
 
 import Navigate from "./Navigate";
 
@@ -16,14 +16,15 @@ export class Route extends Component<RouteProps, {}> {
         };
         if (this.children.length > 1) {
             throw new Error('Route have only 1 child');
-        }
+        };
 
         return this.children[0];
     };
-}
+};
 
 export class Router extends Component<{}, {}> {
 
+    // связка Роутера и Навигатора
     public componentDidMount(): void {
         Navigate.addCallback(() => {
             this.applyComponentChanges();
@@ -63,9 +64,8 @@ export class Router extends Component<{}, {}> {
         }
 
         return createElement(
-            'div',
-            { },
+            'div', { },
             createText('Ошибка при роутинге')
         );
     };
-}
+};
