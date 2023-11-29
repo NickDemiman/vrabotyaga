@@ -7,7 +7,9 @@ import Navigate from "./shared/services/router/Navigate";
 import Dispatcher from "./shared/services/store/Dispatcher";
 
 import CounterStore from "./CounterStore";
+
 import { Button } from "./components/Button/Button";
+import { Text } from "./components/Text/Text";
 
 interface AppState {
     name: string,
@@ -54,8 +56,12 @@ export class App extends Component<{}, AppState> {
                     variant: 'primary', 
                     onclick: () => { this.incCount(); },
                 },
-                createText('Нажми на эту кнопку со стилем primary: '),
-                createText(this.state.count),
+                createComponent(
+                    Text, 
+                    { 
+                        variant: 'regular', 
+                        text: 'Нажми на эту кнопку со стилем primary: ' + this.state.count 
+                    }),
             ),
             // демонатсрация работы store
             createElement(
