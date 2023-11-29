@@ -13,6 +13,7 @@ import { Text } from "./components/Text/Text";
 import { Svg } from "./components/Svg/Svg";
 
 import logo from './assets/icons/logo.svg';
+import cart from './assets/icons/cart.svg';
 
 interface AppState {
     title: string,
@@ -59,19 +60,20 @@ export class App extends Component<{}, AppState> {
                 )
             ),
             createComponent(
-                Svg,
-                {
-                    content: logo,
-                }
+                Svg, { content: logo }
             ),
             // демонстрация работы setState
             createComponent(
                 Button,
                 { 
                     id: 'button', 
-                    variant: 'primary', 
-                    text: 'Нажми на эту кнопку со стилем primary: ' + this.state.count,
-                    onclick: () => { this.incCount(); },
+                    leftIcon: {
+                        height: 28,
+                        width: 28,
+                        content: cart,
+                    },
+                    text: this.state.count,
+                    onclick: () => { this.incCount(); console.log('click'); },
                 }
             ),
             // демонатсрация работы store

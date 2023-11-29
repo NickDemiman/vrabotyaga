@@ -253,11 +253,9 @@ export const applyChanges = (element: HTMLElement | Text, difference: VDomNodeUp
                 (element as any)[prop] = difference.props.set[prop];
             }
         });
-    } else {
-        throw new Error('попытка внести данные в Text');
-    }
+    };
 
-    applyChildrenChanges(element, difference.children);
+    applyChildrenChanges(element as HTMLElement, difference.children);
 
     return element;
 };
