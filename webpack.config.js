@@ -1,4 +1,10 @@
 const path = require('path');
+const webpack = require('webpack');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+
+require('dotenv').config( {
+  path: path.join(__dirname, '.env/.env.frontend')
+} );
 
 module.exports = {
   mode: 'development',
@@ -39,7 +45,7 @@ module.exports = {
     ]
   },
   resolve: {
-    extensions: ['.json', '.ts', '.hbs', '.js', ''],
+    extensions: ['.json', '.ts', '.hbs', '.js', 'scss', ''],
     modules: [ '/node_modules' ]
   },
   devtool: 'source-map',

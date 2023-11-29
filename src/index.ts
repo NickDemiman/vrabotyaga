@@ -1,3 +1,4 @@
+import "./assets/css/index.scss";
 import { App } from "./App";
 
 import { renderToElementDyId, createComponent } from "./shared/services/vdom/VirtualDOM";
