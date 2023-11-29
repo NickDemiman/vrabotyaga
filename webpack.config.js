@@ -41,11 +41,19 @@ module.exports = {
       {
         test: /\.(sa|sc|c)ss$/,
         use: ["style-loader", "css-loader", "sass-loader"]
+      },
+      {
+        test: /\.(svg)$/,
+        use: ['raw-loader'],
       }
+      /*{
+        test: /\.svg$/,
+        loader: 'svg-inline-loader'
+      }*/
     ]
   },
   resolve: {
-    extensions: ['.json', '.ts', '.hbs', '.js', 'scss', ''],
+    extensions: ['.json', '.ts', '.hbs', '.js', '.scss', '.svg', ''],
     modules: [ '/node_modules' ]
   },
   devtool: 'source-map',

@@ -10,6 +10,9 @@ import CounterStore from "./CounterStore";
 
 import { Button } from "./components/Button/Button";
 import { Text } from "./components/Text/Text";
+import { Svg } from "./components/Svg/Svg";
+
+import logo from './assets/icons/logo.svg';
 
 interface AppState {
     title: string,
@@ -54,6 +57,12 @@ export class App extends Component<{}, AppState> {
                         text: this.state.title
                     }
                 )
+            ),
+            createComponent(
+                Svg,
+                {
+                    content: logo,
+                }
             ),
             // демонстрация работы setState
             createComponent(

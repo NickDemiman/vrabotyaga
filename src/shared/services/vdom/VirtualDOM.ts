@@ -42,6 +42,9 @@ export const createText = (
     });  
 };
 
+// парсер необходим для svg-элементов
+const parser = new DOMParser();
+
 export const createElement = (
     tag: string,
     props: VDomPropsType,
@@ -72,10 +75,19 @@ export const createComponent = <PropsType extends object>(
 
 export const renderVDomNode = (rootNode: VDomNode): HTMLElement | Text => {
     if (rootNode.kind == 'text') {
-        return document.createTextNode(rootNode.value);
+        return document.createTextNode(rootNode.value.toString());
     };
 
     if (rootNode.kind == 'element') {
+        if (rootNode.tag == 'svg-element') {
+            if (!rootNode.props) {
+                throw new Error('');
+            }
+            const svgElement = parser.parseFromString(rootNode.props['svgcontent'].toString(), 'image/svg+xml');
+            
+            return svgElement.documentElement;
+        }
+
         const element = document.createElement(rootNode.tag);
 
         Object.keys(rootNode.props || {}).forEach((prop) => {

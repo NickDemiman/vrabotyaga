@@ -5,9 +5,11 @@ import { createElement, createComponent } from "../../shared/services/vdom/Virtu
 
 import { Text, TextTypes } from "../Text/Text";
 
+export type ButtonTypes = 'primary' | 'neutral' | 'secondary' | 'accent' | 'outlined';
+
 export interface ButtonProps {
     id?: string,
-    variant: 'primary' | 'neutral' | 'secondary' | 'accent' | 'outlined',
+    variant: ButtonTypes,
     subvariant?: string,
     text?: string | number,
     textvariant?: TextTypes,
