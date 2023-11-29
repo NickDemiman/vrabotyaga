@@ -1,12 +1,16 @@
 import "./Button.scss";
 
 import { Component } from "../../shared/services/snail/component";
-import { createElement } from "../../shared/services/vdom/VirtualDOM";
+import { createElement, createComponent } from "../../shared/services/vdom/VirtualDOM";
+
+import { Text, TextTypes } from "../Text/Text";
 
 export interface ButtonProps {
     id?: string,
     variant: 'primary' | 'neutral' | 'secondary' | 'accent' | 'outlined',
     subvariant?: string,
+    text?: string | number,
+    textvariant?: TextTypes,
     style?: string,
     name?: string,
     type?: string,
@@ -21,7 +25,11 @@ export class Button extends Component<ButtonProps, {}> {
         };
 
         // отделение параметров для тега и пользовательских параметров
-        const { variant, subvariant, ...buttonProps } = this.props;
+        const { 
+            variant, subvariant, 
+            text, textvariant, 
+            ...buttonProps 
+        } = this.props;
 
         return createElement(
             'button',
@@ -29,7 +37,14 @@ export class Button extends Component<ButtonProps, {}> {
                 ...buttonProps,
                 class: 'button-' + variant + ' ' + (subvariant || ''),
             },
-            ...this.children
+            createComponent(
+                Text,
+                {
+                    variant: textvariant || 'regular',
+                    text: text || '',
+                    style: 'text-align: center; text-wrap: nowrap;'
+                }
+            ),
         );
     };
 }

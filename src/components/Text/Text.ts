@@ -3,9 +3,11 @@ import "./Text.scss";
 import { Component } from "../../shared/services/snail/component";
 import { createElement, createText } from "../../shared/services/vdom/VirtualDOM";
 
+export type TextTypes = 'regular' | 'header' | 'subheader' | 'caption';
+
 export interface TextProps {
     id?: string,
-    variant: 'regular' | 'header' | 'subheader' | 'caption',
+    variant: TextTypes,
     tag?: 'div' | 'span' | 'p',
     text: string | number | boolean,
     style?: string,

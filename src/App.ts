@@ -12,25 +12,26 @@ import { Button } from "./components/Button/Button";
 import { Text } from "./components/Text/Text";
 
 interface AppState {
-    name: string,
     title: string,
     count: number,
 };
 
+const initAppState: AppState = {
+    title: 'Welcome to the App',
+    count: 0 
+};
+
 export class App extends Component<{}, AppState> {
 
-    state = { 
-        name: 'App',
-        title: 'Welcome to the App',
-        count: 0 
-    };
+    state = { ...initAppState };
 
-    // функция для демонастрации работы setState
+    // функция для демонстрации работы setState
     incCount() {
         this.setState((state) => {
+            // к сожалению здесь придётся делать подобные проверки
             if (!state) {
-                throw new Error('state is undefined');
-            }
+                state = { ...initAppState };
+            };
             state.count = this.state.count + 1;
             return state;
         });
@@ -46,7 +47,13 @@ export class App extends Component<{}, AppState> {
             'div', { id: 'root' }, 
             createElement(
                 'div', { },
-                createText(this.state.title)
+                createComponent(
+                    Text,
+                    {
+                        variant: 'header',
+                        text: this.state.title
+                    }
+                )
             ),
             // демонстрация работы setState
             createComponent(
@@ -54,38 +61,35 @@ export class App extends Component<{}, AppState> {
                 { 
                     id: 'button', 
                     variant: 'primary', 
+                    text: 'Нажми на эту кнопку со стилем primary: ' + this.state.count,
                     onclick: () => { this.incCount(); },
-                },
-                createComponent(
-                    Text, 
-                    { 
-                        variant: 'regular', 
-                        text: 'Нажми на эту кнопку со стилем primary: ' + this.state.count 
-                    }),
+                }
             ),
             // демонатсрация работы store
-            createElement(
-                'button',                
+            createComponent(
+                Button,
                 {
+                    variant: 'primary',
+                    text: 'Count from store: ' + CounterStore.getCount(),
                     onclick: () => { Dispatcher.dispatch({ name: 'INC_COUNT' }) },
                 },
-                createText('Count from store: '),
-                createText(CounterStore.getCount()),
             ),
             // демонстрация работы роутинга
-            createElement(
-                'button',                
+            createComponent(
+                Button,
                 {
+                    variant: 'outlined',
+                    text: 'Вход',
                     onclick: () => { Navigate.navigateTo('/signin'); },
                 },
-                createText('Вход'),
             ),
-            createElement(
-                'button',                
+            createComponent(
+                Button,
                 {
+                    variant: 'outlined',
+                    text: 'Главная страница',
                     onclick: () => { Navigate.navigateTo('/'); },
                 },
-                createText('Главная страница'),
             ),
             createComponent(
                 Router, { },
@@ -94,14 +98,26 @@ export class App extends Component<{}, AppState> {
                     { path: new RegExp('^/$') },
                     createElement(
                         'div', { },
-                        createText('Главная страница')
+                        createComponent(
+                            Text,
+                            {
+                                variant: 'subheader',
+                                text: 'Главная страница'
+                            }
+                        )
                     ),
                 ),
                 createComponent(
                     Route, { path: new RegExp('^/signin$') },
                     createElement(
                         'div', { },
-                        createText('Вход')
+                        createComponent(
+                            Text,
+                            {
+                                variant: 'subheader',
+                                text: 'Вход'
+                            }
+                        )
                     ),
                 ),
             )
