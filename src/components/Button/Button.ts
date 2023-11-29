@@ -4,9 +4,15 @@ import { Component } from "../../shared/services/snail/component";
 import { createElement, createComponent, createText } from "../../shared/services/vdom/VirtualDOM";
 
 import { Text, TextTypes } from "../Text/Text";
-import { Svg, SvgProps } from "../Svg/Svg";
+import { Svg } from "../Svg/Svg";
 
 export type ButtonTypes = 'primary' | 'neutral' | 'secondary' | 'accent' | 'outlined' | 'base';
+
+export interface ButtonIconProps {
+    content: string,
+    width?: number,
+    height?: number,
+}
 
 export interface ButtonProps {
     id?: string,
@@ -14,8 +20,8 @@ export interface ButtonProps {
     subvariant?: string,
     text?: string | number,
     textvariant?: TextTypes,
-    leftIcon?: SvgProps,
-    rightIcon?: SvgProps,
+    leftIcon?: ButtonIconProps,
+    rightIcon?: ButtonIconProps,
     style?: string,
     name?: string,
     type?: string,
