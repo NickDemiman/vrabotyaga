@@ -5,6 +5,11 @@ import { createElement, createText } from "../../shared/services/vdom/VirtualDOM
 
 export type TextTypes = 'regular' | 'header' | 'subheader' | 'caption';
 
+export const TextPrefix = 'text-';
+export const getTextClass = (type: TextTypes | undefined): string => {
+    return TextPrefix + (type || 'regular');
+};
+
 export interface TextProps {
     id?: string,
     variant: TextTypes,
@@ -28,7 +33,7 @@ export class Text extends Component<TextProps, {}> {
             tag || 'span',
             {
                 ...textProps,
-                class: 'text-' + variant,
+                class: getTextClass(variant),
             },
             createText(this.props.text)
         );
