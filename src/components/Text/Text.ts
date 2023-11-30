@@ -1,7 +1,7 @@
 import "./Text.scss";
 
 import { Component } from "../../shared/services/snail/component";
-import { createElement, createText } from "../../shared/services/vdom/VirtualDOM";
+import { createElement, createText } from "../../shared/services/snail/vdom/VirtualDOM";
 
 export type TextTypes = 'regular' | 'header' | 'subheader' | 'caption';
 

@@ -1,4 +1,4 @@
-import { Component } from "../snail/component";
+import { Component } from "../component";
 
 export type VDomPropType = string | number | boolean | Function; 
 

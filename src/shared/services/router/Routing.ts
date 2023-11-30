@@ -1,5 +1,5 @@
 import { Component } from "../snail/component";
-import { createElement, createText } from "../vdom/VirtualDOM";
+import { createElement, createText } from "../snail/vdom/VirtualDOM";
 
 import Navigate from "./Navigate";
 

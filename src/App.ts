@@ -1,5 +1,5 @@
 import { Component } from "./shared/services/snail/component";
-import { createComponent, createElement, createText } from "./shared/services/vdom/VirtualDOM";
+import { createComponent, createElement, createText } from "./shared/services/snail/vdom/VirtualDOM";
 
 import { Router, Route } from "./shared/services/router/Routing";
 import Navigate from "./shared/services/router/Navigate";
@@ -136,7 +136,7 @@ export class App extends Component<{}, AppState> {
             createComponent(
                 TextArea,
                 {}
-            )
+            ),
         );
     };
 };

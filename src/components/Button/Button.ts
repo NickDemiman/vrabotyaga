@@ -1,7 +1,7 @@
 import "./Button.scss";
 
 import { Component } from "../../shared/services/snail/component";
-import { createElement, createComponent, createText } from "../../shared/services/vdom/VirtualDOM";
+import { createElement, createComponent, createText } from "../../shared/services/snail/vdom/VirtualDOM";
 
 import { Text, TextTypes } from "../Text/Text";
 import { Svg } from "../Svg/Svg";

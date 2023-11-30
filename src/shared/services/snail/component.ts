@@ -1,5 +1,5 @@
-import { VDomNodeUpdater, applyChanges, getDifference } from "../vdom/Difference";
-import { VDomNode } from "../vdom/VirtualDOM";
+import { VDomNodeUpdater, applyChanges, getDifference } from "./vdom/Difference";
+import { VDomNode } from "./vdom/VirtualDOM";
 
 export abstract class Component<PropsType, StateType> {
 

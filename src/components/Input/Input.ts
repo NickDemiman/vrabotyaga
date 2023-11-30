@@ -1,7 +1,7 @@
 import "./Input.scss";
 
 import { Component } from "../../shared/services/snail/component";
-import { createElement } from "../../shared/services/vdom/VirtualDOM";
+import { createElement } from "../../shared/services/snail/vdom/VirtualDOM";
 
 import { TextTypes, getTextClass } from "../Text/Text";
 
