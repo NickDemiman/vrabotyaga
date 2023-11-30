@@ -51,10 +51,11 @@ export class Button extends Component<ButtonProps, {}> {
             },
 
             (leftIcon) ?
-                createComponent(
-                    Svg, { ...leftIcon, id: 'left-icon' }
-                ) 
-                : createText(''),
+            createComponent(
+                Svg, { ...leftIcon, id: 'left-icon' }
+            ) 
+            : createText(''),
+            
             createComponent(
                 Text,
                 {
@@ -64,11 +65,12 @@ export class Button extends Component<ButtonProps, {}> {
                     style: 'text-align: center; text-wrap: nowrap;'
                 }
             ),
+
             (rightIcon) ?
-                createComponent(
-                    Svg, { ...rightIcon, id: 'right-icon' }
-                ) 
-                : createText(''),
+            createComponent(
+                Svg, { ...rightIcon, id: 'right-icon' }
+            ) 
+            : createText(''),
         );
     };
 }

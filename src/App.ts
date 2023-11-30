@@ -14,6 +14,7 @@ import { Svg } from "./components/Svg/Svg";
 
 import logo from './assets/icons/logo.svg';
 import cart from './assets/icons/cart.svg';
+import { TextArea } from "./components/TextArea/TextArea";
 
 interface AppState {
     title: string,
@@ -131,6 +132,10 @@ export class App extends Component<{}, AppState> {
                         )
                     ),
                 ),
+            ),
+            createComponent(
+                TextArea,
+                {}
             )
         );
     };
